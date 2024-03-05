@@ -1,0 +1,71 @@
+[
+    {
+        "key": "group_daily_log_fields",
+        "title": "Daily Log Fields",
+        "fields": [
+            {
+                "key": "field_habit_relationship",
+                "label": "Linked Habits",
+                "name": "linked_habits",
+                "type": "relationship",
+                "instructions": "Select the habit(s) this log entry relates to.",
+                "required": 1,
+                "post_type": [
+                    "habit"
+                ],
+                "return_format": "object",
+                "multiple": 0,
+                "filters": [
+                    "search",
+                    "post_type"
+                ]
+            },
+            {
+                "key": "field_completion_status",
+                "label": "Completion Status",
+                "name": "completion_status",
+                "type": "true_false",
+                "instructions": "Mark if the habit was completed.",
+                "required": 0,
+                "message": "Completed",
+                "ui": 1
+            },
+            {
+                "key": "field_notes",
+                "label": "Notes",
+                "name": "notes",
+                "type": "textarea",
+                "instructions": "Any additional notes or observations for the day.",
+                "required": 0
+            },
+            {
+                "key": "field_log_date",
+                "label": "Date",
+                "name": "log_date",
+                "type": "date_picker",
+                "instructions": "The date for this log entry.",
+                "required": 1,
+                "display_format": "F j, Y",
+                "return_format": "F j, Y",
+                "first_day": 1
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "daily_log"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": 1,
+        "description": ""
+    }
+]
