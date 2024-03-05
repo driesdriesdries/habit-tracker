@@ -63,3 +63,12 @@ function my_plugin_load_custom_template( $template ) {
     return $template;
 }
 add_filter( 'template_include', 'my_plugin_load_custom_template', 99 );
+
+function habit_tracker_enqueue_styles() {
+    // Use plugins_url to get the correct path to your CSS file
+    $css_file_url = plugins_url('habit-tracker-styles.css', __FILE__);
+    
+    // Enqueue your stylesheet
+    wp_enqueue_style('habit-tracker-styles', $css_file_url);
+}
+add_action('wp_enqueue_scripts', 'habit_tracker_enqueue_styles');
