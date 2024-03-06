@@ -12,7 +12,7 @@ get_header();
 
 <main id="primary" class="site-main fade-in">
 
-    <div class="wrapper archive">
+    <div class="wrapper single-post">
         <h1>Archive Daily Log</h1>
         
         <?php if ( have_posts() ) : ?>
