@@ -1,0 +1,36 @@
+.daily-log-archive {
+    .primary-container {
+        display: flex;
+        width: 100%;
+        .left {
+            background-color: blue;
+            width: 65%;
+        }
+        .right {
+            background-color: tomato;
+            width: 35%;
+        }
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+      
+      &.green-cell {
+        background-color: #5cb85c; // Green
+        color: white;
+      }
+      &.red-cell {
+        background-color: #d9534f; // Red
+        color: white;
+      }
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  }
+  

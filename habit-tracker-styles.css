@@ -1,31 +1,32 @@
-.habit-archive-container {
+.daily-log-archive .primary-container {
   display: flex;
+  width: 100%;
 }
-.habit-archive-container .left,
-.habit-archive-container .right {
-  width: 50%;
-  border: 1px solid #f2f2f2;
-  padding: 1rem;
+.daily-log-archive .primary-container .left {
+  background-color: blue;
+  width: 65%;
 }
-.habit-archive-container .left:nth-child(2),
-.habit-archive-container .right:nth-child(2) {
-  border-left: none;
+.daily-log-archive .primary-container .right {
+  background-color: tomato;
+  width: 35%;
 }
-.habit-archive-container table {
+.daily-log-archive table {
   border-collapse: collapse;
   width: 100%;
 }
-.habit-archive-container table th,
-.habit-archive-container table td {
+.daily-log-archive th, .daily-log-archive td {
   border: 1px solid black;
-  text-align: left;
   padding: 8px;
+  text-align: left;
 }
-.habit-archive-container .yes {
-  background-color: #005900;
+.daily-log-archive th.green-cell, .daily-log-archive td.green-cell {
+  background-color: #5cb85c;
   color: white;
 }
-.habit-archive-container .no {
-  background-color: #ee0000;
+.daily-log-archive th.red-cell, .daily-log-archive td.red-cell {
+  background-color: #d9534f;
   color: white;
+}
+.daily-log-archive th {
+  background-color: #f2f2f2;
 }
