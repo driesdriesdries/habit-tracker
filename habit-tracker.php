@@ -174,3 +174,7 @@ function ht_deactivate() {
 }
 register_deactivation_hook(__FILE__, 'ht_deactivate');
 
+function enqueue_chart_js() {
+    wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '2.9.4', true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_chart_js');

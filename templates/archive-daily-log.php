@@ -12,13 +12,15 @@ get_header(); ?>
 <main id="primary" class="site-main fade-in">
     <div class="wrapper single-post daily-log-archive">
         <div class="primary-container">
-            <div class="left">Chart will go here</div>
-            <div class="right">Panels will go here</div>
+            <div class="right">Panels will go here</div>    
+            <div class="left">
+                <canvas id="habitsChart" width="400" height="200"></canvas>
+            </div>
         </div>
         <h2>All Habits Performance</h2>
 
         <?php
-        // First, fetch all habits to create table headers and gather goals and completion counts
+        // First, fetch all habits to create table headers and gather completion counts
         $habits_query = new WP_Query(array(
             'post_type' => 'habit',
             'posts_per_page' => -1, // Fetch all habits
@@ -27,7 +29,7 @@ get_header(); ?>
         $habits = [];
         $habit_goals = [];
         $habit_completions = [];
-        if ($habits_query->have_posts()) : 
+        if ($habits_query->have_posts()) :
             while ($habits_query->have_posts()) : $habits_query->the_post();
                 $habit_id = get_the_ID();
                 $habits[$habit_id] = get_the_title(); // Store habit ID and title
@@ -53,8 +55,43 @@ get_header(); ?>
             endwhile;
             wp_reset_postdata();
         endif;
+        ?>
 
-        if (have_posts()) : ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var ctx = document.getElementById('habitsChart').getContext('2d');
+                var habitsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: <?php echo json_encode(array_values($habits)); ?>,
+                        datasets: [{
+                            label: 'Goals',
+                            data: <?php echo json_encode(array_values($habit_goals)); ?>,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Completions',
+                            data: <?php echo json_encode(array_values($habit_completions)); ?>,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+        </script>
+
+        <?php if (have_posts()) : ?>
             <table>
                 <tr>
                     <th>Date</th>
@@ -62,25 +99,15 @@ get_header(); ?>
                         <th><?php echo esc_html($habit_title); ?></th>
                     <?php endforeach; ?>
                 </tr>
-                <tr class="goal">
-                    <td>Goal</td>
-                    <?php foreach ($habit_goals as $goal) : ?>
-                        <td><?php echo esc_html($goal); ?></td>
-                    <?php endforeach; ?>
-                </tr>
-                <tr class="completed">
-                    <td>Completed</td>
-                    <?php foreach ($habit_completions as $completion) : ?>
-                        <td><?php echo esc_html($completion); ?></td>
-                    <?php endforeach; ?>
-                </tr>
                 <?php while (have_posts()) : the_post(); ?>
                     <tr>
                         <td><a href="<?php echo get_permalink(); ?>"><?php echo get_field('log_date'); ?></a></td>
-                        <?php 
+                        <?php
                         foreach ($habits as $habit_id => $habit_title) :
                             $linked_habits = get_field('linked_habits');
-                            $is_completed = in_array($habit_id, array_map(function($habit) { return $habit->ID; }, (array) $linked_habits)) ? true : false;
+                            $is_completed = in_array($habit_id, array_map(function ($habit) {
+                                return $habit->ID;
+                            }, (array)$linked_habits)) ? true : false;
                             ?>
                             <td class="<?php echo $is_completed ? 'green-cell' : 'red-cell'; ?>"><?php echo $is_completed ? '✔' : '✖'; ?></td>
                         <?php endforeach; ?>
@@ -90,7 +117,7 @@ get_header(); ?>
         <?php else : ?>
             <p>No daily logs found.</p>
         <?php endif; ?>
-    </div>  
+    </div>
 </main><!-- #main -->
 
 <?php get_footer(); ?>

@@ -1,15 +1,15 @@
 .daily-log-archive .primary-container {
   display: flex;
+  flex-direction: column;
   width: 100%;
 }
 .daily-log-archive .primary-container .left {
-  background-color: blue;
-  width: 65%;
+  width: 100%;
   color: white;
 }
 .daily-log-archive .primary-container .right {
   background-color: tomato;
-  width: 35%;
+  width: 100%;
 }
 .daily-log-archive table {
   border-collapse: collapse;
