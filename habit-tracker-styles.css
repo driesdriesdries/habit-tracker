@@ -1,5 +1,6 @@
 .daily-log-archive .primary-container {
-  padding: 2rem;
+  max-width: 1240px;
+  margin: auto;
 }
 .daily-log-archive .panel-group,
 .daily-log-archive .graph,
@@ -17,7 +18,7 @@
 .daily-log-archive table td {
   border: 1px solid black;
   padding: 8px;
-  text-align: left;
+  text-align: center;
 }
 .daily-log-archive table th.green-cell,
 .daily-log-archive table td.green-cell {

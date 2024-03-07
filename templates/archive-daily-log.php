@@ -13,14 +13,14 @@ get_header(); ?>
     <div class="wrapper daily-log-archive">
         <div class="primary-container">
             <div class="panel-group">
-                <h2>Panels go here</h2>
+                <h3>Panels go here</h3>
             </div>
             <div class="graph">
-                <h2>Graph</h2>
+                <h3>Graph</h3>
                 <canvas id="habitsChart" width="400" height="200"></canvas>
             </div>
             <div class="table">
-                <h2>All Habits Performance</h2>
+                <h3>All Habits Performance</h3>
 
                 <?php
                 // First, fetch all habits to create table headers and gather completion counts
