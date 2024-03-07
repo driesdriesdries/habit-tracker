@@ -1,43 +1,40 @@
 .daily-log-archive {
-    .primary-container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        .left {
-            width: 100%;
-            color: white;
-        }
-        .right {
-            background-color: tomato;
-            width: 100%;
-        }
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      .goal {
-        background-color: rgb(248, 210, 23);
-      }
-      .completed {
-        background-color: rgb(184, 250, 255);
-      }
-    }
-    th, td {
+  .primary-container {
+    padding: 2rem;
+  }
+
+  .panel-group,
+  .graph,
+  .table {
+    box-shadow: $box-shadow;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 2rem;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th,
+    td {
       border: 1px solid black;
       padding: 8px;
       text-align: left;
-      
+
       &.green-cell {
         background-color: #5cb85c; // Green
         color: white;
       }
+
       &.red-cell {
         background-color: #d9534f; // Red
         color: white;
       }
     }
+
     th {
       background-color: #f2f2f2;
     }
   }
-  
+}
