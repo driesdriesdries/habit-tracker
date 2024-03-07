@@ -15,7 +15,7 @@ get_header(); ?>
             <div class="left">Chart will go here</div>
             <div class="right">Panels will go here</div>
         </div>
-        <h1>Archive Daily Log</h1>
+        <h2>All Habits Performance</h2>
 
         <?php
         // First, fetch all habits to create table headers and gather goals and completion counts
@@ -62,13 +62,13 @@ get_header(); ?>
                         <th><?php echo esc_html($habit_title); ?></th>
                     <?php endforeach; ?>
                 </tr>
-                <tr>
+                <tr class="goal">
                     <td>Goal</td>
                     <?php foreach ($habit_goals as $goal) : ?>
                         <td><?php echo esc_html($goal); ?></td>
                     <?php endforeach; ?>
                 </tr>
-                <tr>
+                <tr class="completed">
                     <td>Completed</td>
                     <?php foreach ($habit_completions as $completion) : ?>
                         <td><?php echo esc_html($completion); ?></td>
