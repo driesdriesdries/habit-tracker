@@ -1,16 +1,4 @@
 <?php
-/**
- * The template for displaying archive pages for 'daily_log' custom post type,
- * with a simple year selection filter added for the 'log_date' custom field,
- * dynamic panels showing the total number of habits completed, the strongest habit(s)
- * including handling ties, and displaying the weakest habit(s), properly including habits that haven't been completed,
- * and calculating and displaying the longest streak for a habit.
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Andries
- */
-
 get_header(); ?>
 
 <?php if (is_user_logged_in()) : ?>
@@ -71,7 +59,7 @@ get_header(); ?>
                             ),
                         ),
                         'orderby' => 'meta_value',
-                        'order' => 'ASC', // Ensure logs are sorted by date
+                        'order' => 'DESC', // Change order to DESC for most recent date at the top
                     );
                     $logs_query = new WP_Query($args);
 
@@ -217,12 +205,31 @@ get_header(); ?>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($logs_query->have_posts()) : $logs_query->the_post(); ?>
+                                <?php 
+                                $logs = [];
+                                while ($logs_query->have_posts()) : 
+                                    $logs_query->the_post();
+                                    $logs[] = [
+                                        'date' => get_field('log_date'),
+                                        'post_id' => get_the_ID()
+                                    ];
+                                endwhile;
+                                wp_reset_postdata();
+
+                                // Sort logs by date in descending order
+                                usort($logs, function($a, $b) {
+                                    return strtotime($b['date']) - strtotime($a['date']);
+                                });
+
+                                foreach ($logs as $log) : 
+                                    $log_date = $log['date'];
+                                    $log_post_id = $log['post_id'];
+                                ?>
                                     <tr>
-                                        <td><a href="<?php the_permalink(); ?>"><?php the_field('log_date'); ?></a></td>
+                                        <td><a href="<?php echo get_permalink($log_post_id); ?>"><?php echo $log_date; ?></a></td>
                                         <?php
                                         foreach ($habits as $habit_id => $habit_title) :
-                                            $linked_habits = get_field('linked_habits');
+                                            $linked_habits = get_field('linked_habits', $log_post_id);
                                             $is_completed = in_array($habit_id, array_map(function ($habit) {
                                                 return $habit->ID;
                                             }, (array)$linked_habits)) ? true : false;
@@ -230,7 +237,7 @@ get_header(); ?>
                                             <td class="<?php echo $is_completed ? 'green-cell' : 'red-cell'; ?>"><?php echo $is_completed ? '✔' : '✖'; ?></td>
                                         <?php endforeach; ?>
                                     </tr>
-                                <?php endwhile; ?>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     <?php else : ?>
