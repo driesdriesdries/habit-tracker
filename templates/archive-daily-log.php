@@ -3,7 +3,7 @@
  * The template for displaying archive pages for 'daily_log' custom post type,
  * with a simple year selection filter added for the 'log_date' custom field,
  * dynamic panels showing the total number of habits completed, and the strongest habit(s)
- * including handling ties.
+ * including handling ties, and displaying the weakest habit(s).
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -26,8 +26,8 @@ get_header(); ?>
                         <span id="strongest_habit">Calculating...</span>
                     </div>
                     <div class="panel">
-                        <p>Weakest Habit</p>
-                        <span>xxx</span>
+                        <p>Weakest Habit(s)</p>
+                        <span id="weakest_habit">Calculating...</span>
                     </div>
                     <div class="panel">
                         <p>Longest streak</p>
@@ -81,6 +81,7 @@ get_header(); ?>
                     $habit_goals = [];
                     $habit_completions = [];
                     $strongest_habits = []; // Store IDs of strongest habits
+                    $weakest_habits = []; // Store IDs of weakest habits
 
                     if ($habits_query->have_posts()) :
                         while ($habits_query->have_posts()) : $habits_query->the_post();
@@ -105,6 +106,13 @@ get_header(); ?>
                                     } elseif ($habit_completions[$linked_habit->ID] == $strongest_habit_completions) {
                                         $strongest_habits[] = $linked_habit->ID; // Add tied habit
                                     }
+                                    // Check for tie or new weakest habit
+                                    if ($habit_completions[$linked_habit->ID] < $weakest_habit_completions || !isset($weakest_habit_completions)) {
+                                        $weakest_habits = [$linked_habit->ID]; // New weakest habit found
+                                        $weakest_habit_completions = $habit_completions[$linked_habit->ID];
+                                    } elseif ($habit_completions[$linked_habit->ID] == $weakest_habit_completions) {
+                                        $weakest_habits[] = $linked_habit->ID; // Add tied habit
+                                    }
                                 }
                             }
                         endwhile;
@@ -113,6 +121,7 @@ get_header(); ?>
 
                     // Convert habit IDs to names for display
                     $strongest_habit_names = array_intersect_key($habits, array_flip($strongest_habits));
+                    $weakest_habit_names = array_intersect_key($habits, array_flip($weakest_habits));
                     ?>
 
                     <script>
@@ -144,9 +153,10 @@ get_header(); ?>
                                     }
                                 }
                             });
-                            // Update total completions and strongest habit(s) span with calculated total and names
+                            // Update total completions, strongest habit(s), and weakest habit(s) span with calculated totals and names
                             document.getElementById('total_completions').textContent = '<?php echo array_sum($habit_completions); ?>';
                             document.getElementById('strongest_habit').textContent = '<?php echo implode(', ', $strongest_habit_names); ?>';
+                            document.getElementById('weakest_habit').textContent = '<?php echo implode(', ', $weakest_habit_names); ?>';
                         });
                     </script>
 

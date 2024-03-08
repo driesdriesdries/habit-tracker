@@ -19,6 +19,20 @@
 .daily-log-archive .panel-group {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
+}
+.daily-log-archive .panel-group .panel {
+  width: 25%;
+  padding: 2rem;
+  border: 1px solid #f2f2f2;
+  border-radius: 25px;
+  text-align: center;
+}
+.daily-log-archive .panel-group .panel p {
+  font-weight: bold;
+}
+.daily-log-archive .panel-group .panel span {
+  font-size: 14px;
 }
 .daily-log-archive table {
   border-collapse: collapse;
