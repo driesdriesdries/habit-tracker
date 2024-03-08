@@ -2,8 +2,9 @@
 /**
  * The template for displaying archive pages for 'daily_log' custom post type,
  * with a simple year selection filter added for the 'log_date' custom field,
- * dynamic panels showing the total number of habits completed, and the strongest habit(s)
- * including handling ties, and displaying the weakest habit(s), properly including habits that haven't been completed.
+ * dynamic panels showing the total number of habits completed, the strongest habit(s)
+ * including handling ties, and displaying the weakest habit(s), properly including habits that haven't been completed,
+ * and calculating and displaying the longest streak for a habit.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -30,8 +31,9 @@ get_header(); ?>
                         <span id="weakest_habit">Calculating...</span>
                     </div>
                     <div class="panel">
-                        <p>Longest streak</p>
-                        <span>xxx</span>
+                        <p>Longest Streak</p>
+                        <div id="longest_streak_habit" style="font-weight: bold;">Calculating...</div>
+                        <div id="longest_streak_days"> </div>
                     </div>
                 </div>
                 <div class="graph">
@@ -68,6 +70,8 @@ get_header(); ?>
                                 'type' => 'DATE'
                             ),
                         ),
+                        'orderby' => 'meta_value',
+                        'order' => 'ASC', // Ensure logs are sorted by date
                     );
                     $logs_query = new WP_Query($args);
 
@@ -84,6 +88,10 @@ get_header(); ?>
                     $weakest_habits = []; // Store IDs of weakest habits
                     $strongest_habit_completions = 0; // Track completions of the strongest habit
                     $weakest_habit_completions = PHP_INT_MAX; // Initialize to a max value for comparison
+                    $habit_streaks = []; // Store current streaks
+                    $longest_streaks = []; // Store longest streaks
+                    $longest_streak_habit = '';
+                    $longest_streak_count = 0;
 
                     if ($habits_query->have_posts()) :
                         while ($habits_query->have_posts()) : $habits_query->the_post();
@@ -91,32 +99,60 @@ get_header(); ?>
                             $habits[$habit_id] = get_the_title();
                             $habit_goals[$habit_id] = get_field('goal_amount');
                             $habit_completions[$habit_id] = 0; // Initialize completions to 0 for all habits
+                            $habit_streaks[$habit_id] = ['count' => 0, 'last_date' => null]; // Initialize streaks
+                            $longest_streaks[$habit_id] = 0; // Initialize longest streaks
                         endwhile;
                         wp_reset_postdata();
                     endif;
 
                     if ($logs_query->have_posts()) :
                         while ($logs_query->have_posts()) : $logs_query->the_post();
+                            $log_date = new DateTime(get_field('log_date'));
                             $linked_habits = get_field('linked_habits');
                             foreach ($linked_habits as $linked_habit) {
                                 $habit_id = $linked_habit->ID;
                                 if (isset($habit_completions[$habit_id])) {
                                     $habit_completions[$habit_id]++;
-                                    // Update strongest habits
+                                    // Update strongest and weakest habits
                                     if ($habit_completions[$habit_id] > $strongest_habit_completions) {
                                         $strongest_habits = [$habit_id]; // New strongest habit found
                                         $strongest_habit_completions = $habit_completions[$habit_id];
                                     } elseif ($habit_completions[$habit_id] == $strongest_habit_completions) {
                                         $strongest_habits[] = $habit_id; // Add tied habit
                                     }
+
+                                    // Streak calculation
+                                    if ($habit_streaks[$habit_id]['last_date']) {
+                                        $diff = $log_date->diff($habit_streaks[$habit_id]['last_date'])->days;
+                                        if ($diff == 1) { // Consecutive day
+                                            $habit_streaks[$habit_id]['count']++;
+                                        } else { // Reset streak
+                                            $habit_streaks[$habit_id]['count'] = 1;
+                                        }
+                                    } else { // First entry for this habit
+                                        $habit_streaks[$habit_id]['count'] = 1;
+                                    }
+                                    $habit_streaks[$habit_id]['last_date'] = $log_date;
+
+                                    // Update longest streak if current streak surpasses it
+                                    if ($habit_streaks[$habit_id]['count'] > $longest_streaks[$habit_id]) {
+                                        $longest_streaks[$habit_id] = $habit_streaks[$habit_id]['count'];
+                                    }
                                 }
                             }
                         endwhile;
                         wp_reset_postdata();
 
+                        // Determine longest streak across all habits
+                        foreach ($longest_streaks as $habit_id => $streak) {
+                            if ($streak > $longest_streak_count) {
+                                $longest_streak_count = $streak;
+                                $longest_streak_habit = $habits[$habit_id];
+                            }
+                        }
+
                         // Determine weakest habits after processing all logs
                         foreach ($habit_completions as $habit_id => $completions) {
-                            // Check for tie or new weakest habit
                             if ($completions < $weakest_habit_completions) {
                                 $weakest_habits = [$habit_id]; // New weakest habit found
                                 $weakest_habit_completions = $completions;
@@ -164,6 +200,9 @@ get_header(); ?>
                             document.getElementById('total_completions').textContent = '<?php echo array_sum($habit_completions); ?>';
                             document.getElementById('strongest_habit').textContent = '<?php echo implode(', ', $strongest_habit_names); ?>';
                             document.getElementById('weakest_habit').textContent = '<?php echo implode(', ', $weakest_habit_names); ?>';
+                            // Update Longest Streak information
+                            document.getElementById('longest_streak_habit').textContent = '<?php echo $longest_streak_habit; ?>';
+                            document.getElementById('longest_streak_days').textContent = '<?php echo $longest_streak_count; ?> days';
                         });
                     </script>
 
