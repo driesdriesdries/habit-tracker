@@ -1,8 +1,9 @@
 <?php
 /**
- * The template for displaying archive pages for 'daily_log' custom post type, 
- * with a simple year selection filter added for the 'log_date' custom field and 
- * a dynamic panel showing the total number of habits completed.
+ * The template for displaying archive pages for 'daily_log' custom post type,
+ * with a simple year selection filter added for the 'log_date' custom field,
+ * dynamic panels showing the total number of habits completed, and the strongest habit(s)
+ * including handling ties.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -16,17 +17,13 @@ get_header(); ?>
         <div class="wrapper daily-log-archive">
             <div class="primary-container">
                 <div class="panel-group">
-                    <?php
-                    // Initialize total completions counter
-                    $total_completions = 0;
-                    ?>
                     <div class="panel">
                         <p>Total Habit Completed</p>
                         <span id="total_completions">Calculating...</span>
                     </div>
                     <div class="panel">
-                        <p>Strongest Habit</p>
-                        <span>xxx</span>
+                        <p>Strongest Habit(s)</p>
+                        <span id="strongest_habit">Calculating...</span>
                     </div>
                     <div class="panel">
                         <p>Weakest Habit</p>
@@ -83,6 +80,7 @@ get_header(); ?>
                     $habits = [];
                     $habit_goals = [];
                     $habit_completions = [];
+                    $strongest_habits = []; // Store IDs of strongest habits
 
                     if ($habits_query->have_posts()) :
                         while ($habits_query->have_posts()) : $habits_query->the_post();
@@ -100,12 +98,21 @@ get_header(); ?>
                             foreach ($linked_habits as $linked_habit) {
                                 if (isset($habit_completions[$linked_habit->ID])) {
                                     $habit_completions[$linked_habit->ID]++;
-                                    $total_completions++; // Increment total completions
+                                    // Check for tie or new strongest habit
+                                    if ($habit_completions[$linked_habit->ID] > $strongest_habit_completions) {
+                                        $strongest_habits = [$linked_habit->ID]; // New strongest habit found
+                                        $strongest_habit_completions = $habit_completions[$linked_habit->ID];
+                                    } elseif ($habit_completions[$linked_habit->ID] == $strongest_habit_completions) {
+                                        $strongest_habits[] = $linked_habit->ID; // Add tied habit
+                                    }
                                 }
                             }
                         endwhile;
                         wp_reset_postdata();
                     endif;
+
+                    // Convert habit IDs to names for display
+                    $strongest_habit_names = array_intersect_key($habits, array_flip($strongest_habits));
                     ?>
 
                     <script>
@@ -137,8 +144,9 @@ get_header(); ?>
                                     }
                                 }
                             });
-                            // Update total completions span with calculated total
-                            document.getElementById('total_completions').textContent = '<?php echo $total_completions; ?>';
+                            // Update total completions and strongest habit(s) span with calculated total and names
+                            document.getElementById('total_completions').textContent = '<?php echo array_sum($habit_completions); ?>';
+                            document.getElementById('strongest_habit').textContent = '<?php echo implode(', ', $strongest_habit_names); ?>';
                         });
                     </script>
 
