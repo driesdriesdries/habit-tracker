@@ -10,6 +10,12 @@
   padding: 2rem;
   border-radius: 2rem;
 }
+.daily-log-archive .panel-group #filter,
+.daily-log-archive .graph #filter,
+.daily-log-archive .table #filter {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 .daily-log-archive table {
   border-collapse: collapse;
   width: 100%;

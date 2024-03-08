@@ -1,6 +1,7 @@
 <?php
 /**
- * The template for displaying archive pages for 'daily_log' custom post type.
+ * The template for displaying archive pages for 'daily_log' custom post type, 
+ * with a simple year selection filter added for the 'log_date' custom field.
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -23,8 +24,37 @@ get_header(); ?>
                 <div class="table">
                     <h3>All Habits Performance</h3>
 
+                    <!-- Year filter form -->
+                    <form id="filter" action="<?php echo site_url('/daily_log/'); ?>" method="get">
+                        <label for="filter_year">Select Year:</label>
+                        <select id="filter_year" name="filter_year">
+                            <?php
+                            $current_year = date('Y');
+                            for ($year = $current_year; $year >= $current_year - 10; $year--): ?>
+                                <option value="<?php echo $year; ?>" <?php echo isset($_GET['filter_year']) && $_GET['filter_year'] == $year ? 'selected' : ''; ?>><?php echo $year; ?></option>
+                            <?php endfor; ?>
+                        </select>
+                        <input type="submit" value="Filter">
+                    </form>
+
                     <?php
-                    // First, fetch all habits to create table headers and gather completion counts
+                    // Adjusting the main query based on the selected year
+                    $filter_year = $_GET['filter_year'] ?? date('Y');
+                    $args = array(
+                        'post_type' => 'daily_log',
+                        'posts_per_page' => -1, // Fetch all logs
+                        'meta_query' => array(
+                            array(
+                                'key' => 'log_date',
+                                'value' => array($filter_year.'-01-01', $filter_year.'-12-31'),
+                                'compare' => 'BETWEEN',
+                                'type' => 'DATE'
+                            ),
+                        ),
+                    );
+                    $logs_query = new WP_Query($args);
+
+                    // Fetch habits for chart and table headers
                     $habits_query = new WP_Query(array(
                         'post_type' => 'habit',
                         'posts_per_page' => -1, // Fetch all habits
@@ -33,21 +63,17 @@ get_header(); ?>
                     $habits = [];
                     $habit_goals = [];
                     $habit_completions = [];
+
                     if ($habits_query->have_posts()) :
                         while ($habits_query->have_posts()) : $habits_query->the_post();
                             $habit_id = get_the_ID();
-                            $habits[$habit_id] = get_the_title(); // Store habit ID and title
-                            $habit_goals[$habit_id] = get_field('goal_amount'); // Store habit goal amount
-                            $habit_completions[$habit_id] = 0; // Initialize completion count
+                            $habits[$habit_id] = get_the_title();
+                            $habit_goals[$habit_id] = get_field('goal_amount');
+                            $habit_completions[$habit_id] = 0;
                         endwhile;
                         wp_reset_postdata();
                     endif;
 
-                    // Calculate completion counts
-                    $logs_query = new WP_Query(array(
-                        'post_type' => 'daily_log',
-                        'posts_per_page' => -1, // Fetch all logs
-                    ));
                     if ($logs_query->have_posts()) :
                         while ($logs_query->have_posts()) : $logs_query->the_post();
                             $linked_habits = get_field('linked_habits');
@@ -84,42 +110,44 @@ get_header(); ?>
                                 },
                                 options: {
                                     scales: {
-                                        yAxes: [{
-                                            ticks: {
-                                                beginAtZero: true
-                                            }
-                                        }]
+                                        y: {
+                                            beginAtZero: true
+                                        }
                                     }
                                 }
                             });
                         });
                     </script>
 
-                    <?php if (have_posts()) : ?>
+                    <?php if ($logs_query->have_posts()) : ?>
                         <table>
-                            <tr>
-                                <th>Date</th>
-                                <?php foreach ($habits as $habit_title) : ?>
-                                    <th><?php echo esc_html($habit_title); ?></th>
-                                <?php endforeach; ?>
-                            </tr>
-                            <?php while (have_posts()) : the_post(); ?>
+                            <thead>
                                 <tr>
-                                    <td><a href="<?php echo get_permalink(); ?>"><?php echo get_field('log_date'); ?></a></td>
-                                    <?php
-                                    foreach ($habits as $habit_id => $habit_title) :
-                                        $linked_habits = get_field('linked_habits');
-                                        $is_completed = in_array($habit_id, array_map(function ($habit) {
-                                            return $habit->ID;
-                                        }, (array)$linked_habits)) ? true : false;
-                                        ?>
-                                        <td class="<?php echo $is_completed ? 'green-cell' : 'red-cell'; ?>"><?php echo $is_completed ? '✔' : '✖'; ?></td>
+                                    <th>Date</th>
+                                    <?php foreach ($habits as $habit_title) : ?>
+                                        <th><?php echo esc_html($habit_title); ?></th>
                                     <?php endforeach; ?>
                                 </tr>
-                            <?php endwhile; ?>
+                            </thead>
+                            <tbody>
+                                <?php while ($logs_query->have_posts()) : $logs_query->the_post(); ?>
+                                    <tr>
+                                        <td><a href="<?php the_permalink(); ?>"><?php the_field('log_date'); ?></a></td>
+                                        <?php
+                                        foreach ($habits as $habit_id => $habit_title) :
+                                            $linked_habits = get_field('linked_habits');
+                                            $is_completed = in_array($habit_id, array_map(function ($habit) {
+                                                return $habit->ID;
+                                            }, (array)$linked_habits)) ? true : false;
+                                            ?>
+                                            <td class="<?php echo $is_completed ? 'green-cell' : 'red-cell'; ?>"><?php echo $is_completed ? '✔' : '✖'; ?></td>
+                                        <?php endforeach; ?>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
                         </table>
                     <?php else : ?>
-                        <p>No daily logs found.</p>
+                        <p>No daily logs found for the selected year.</p>
                     <?php endif; ?>
                 </div>
             </div>
