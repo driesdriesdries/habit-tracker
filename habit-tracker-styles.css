@@ -1,59 +1,25 @@
-.daily-log-archive .primary-container {
-  max-width: 1240px;
+.plugin-container {
+  max-width: 1400px;
   margin: auto;
-}
-.daily-log-archive .panel-group,
-.daily-log-archive .graph,
-.daily-log-archive .table {
+  padding: 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  padding: 2rem;
-  border-radius: 2rem;
-}
-.daily-log-archive .panel-group #filter,
-.daily-log-archive .graph #filter,
-.daily-log-archive .table #filter {
   margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-.daily-log-archive .panel-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-.daily-log-archive .panel-group .panel {
-  width: 25%;
-  padding: 2rem;
   border: 1px solid #f2f2f2;
-  border-radius: 25px;
+}
+
+.daily-log-component form {
+  margin: 2rem 0px;
+  font-size: 16px;
+}
+.daily-log-component table {
   text-align: center;
+  font-size: 12px;
 }
-.daily-log-archive .panel-group .panel p {
-  font-weight: bold;
-}
-.daily-log-archive .panel-group .panel span {
-  font-size: 14px;
-}
-.daily-log-archive table {
-  border-collapse: collapse;
-  width: 100%;
-}
-.daily-log-archive table th,
-.daily-log-archive table td {
-  border: 1px solid black;
-  padding: 8px;
-  text-align: center;
-}
-.daily-log-archive table th.green-cell,
-.daily-log-archive table td.green-cell {
-  background-color: #5cb85c;
+.daily-log-component table .yes {
+  background-color: rgb(0, 80, 0);
   color: white;
 }
-.daily-log-archive table th.red-cell,
-.daily-log-archive table td.red-cell {
-  background-color: #d9534f;
+.daily-log-component table .no {
+  background-color: #DC143C;
   color: white;
-}
-.daily-log-archive table th {
-  background-color: #f2f2f2;
 }
