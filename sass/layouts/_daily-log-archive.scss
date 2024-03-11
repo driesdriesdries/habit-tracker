@@ -1,0 +1,62 @@
+.daily-log-archive {
+  .primary-container {
+    max-width: 1240px;
+    margin: auto;
+  }
+
+  .panel-group,
+  .graph,
+  .table {
+    box-shadow: $box-shadow;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 2rem;
+    #filter {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .panel-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    .panel {
+      width: 25%;
+      padding: 2rem;
+      border: 1px solid #f2f2f2;
+      border-radius: 25px;
+      text-align: center;
+      p {
+        font-weight: bold;
+      }
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+
+      &.green-cell {
+        background-color: #5cb85c; // Green
+        color: white;
+      }
+
+      &.red-cell {
+        background-color: #d9534f; // Red
+        color: white;
+      }
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  }
+}

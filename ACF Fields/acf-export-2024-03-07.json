@@ -1,0 +1,181 @@
+[
+    {
+        "key": "group_daily_log_fields",
+        "title": "Daily Log Fields",
+        "fields": [
+            {
+                "key": "field_habit_relationship",
+                "label": "Linked Habits",
+                "name": "linked_habits",
+                "aria-label": "",
+                "type": "relationship",
+                "instructions": "Select the habit(s) this log entry relates to.",
+                "required": 1,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "post_type": [
+                    "habit"
+                ],
+                "return_format": "object",
+                "multiple": 0,
+                "filters": [
+                    "search",
+                    "post_type"
+                ],
+                "taxonomy": [],
+                "min": 0,
+                "max": 0,
+                "elements": [],
+                "bidirectional_target": []
+            },
+            {
+                "key": "field_notes",
+                "label": "Notes",
+                "name": "notes",
+                "aria-label": "",
+                "type": "textarea",
+                "instructions": "Any additional notes or observations for the day.",
+                "required": 0,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "new_lines": "",
+                "maxlength": "",
+                "placeholder": "",
+                "rows": ""
+            },
+            {
+                "key": "field_log_date",
+                "label": "Date",
+                "name": "log_date",
+                "aria-label": "",
+                "type": "date_picker",
+                "instructions": "The date for this log entry.",
+                "required": 1,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "display_format": "F j, Y",
+                "return_format": "F j, Y",
+                "first_day": 1
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "daily_log"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": [
+            "the_content"
+        ],
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    },
+    {
+        "key": "group_1",
+        "title": "Habit Fields",
+        "fields": [
+            {
+                "key": "field_1",
+                "label": "Habit Description",
+                "name": "habit_description",
+                "aria-label": "",
+                "type": "textarea",
+                "instructions": "Provide a brief description of the habit.",
+                "required": 1,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "new_lines": "",
+                "maxlength": "",
+                "placeholder": "",
+                "rows": ""
+            },
+            {
+                "key": "field_5",
+                "label": "Start Date",
+                "name": "start_date",
+                "aria-label": "",
+                "type": "date_picker",
+                "instructions": "Choose when you plan to start this habit. (optional)",
+                "required": 0,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "display_format": "d\/m\/Y",
+                "return_format": "d\/m\/Y",
+                "first_day": 1
+            },
+            {
+                "key": "field_6",
+                "label": "Goal Amount",
+                "name": "goal_amount",
+                "aria-label": "",
+                "type": "number",
+                "instructions": "Enter a target number for this habit (e.g., pages to read, minutes to meditate).",
+                "required": 0,
+                "conditional_logic": false,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "min": "",
+                "max": "",
+                "step": "",
+                "default_value": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "habit"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": [
+            "the_content"
+        ],
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
