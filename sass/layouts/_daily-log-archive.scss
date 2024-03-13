@@ -1,18 +1,23 @@
 .daily-log-component {
   form {
     margin: 2rem 0px;
-    font-size: 16px;
+    font-size: 24px;
+    font-weight: bold;
   }
   table {
     text-align: center;
     font-size: 12px;
+    td {
+      border: 2px solid rgba(0, 0, 0, 0.45);
+      padding: 1rem .2rem;
+    }
     .yes {
-      background-color: rgb(0, 80, 0);
+      background-color: rgb(19, 47, 19);
       color: white;
     }
     .no {
-      background-color: #DC143C;
-      color: white;
+      background-color: #dc143c66;
+      //color: white;
     }
   }
 }

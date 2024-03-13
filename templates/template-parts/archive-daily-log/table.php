@@ -54,7 +54,12 @@ $no_symbol = '&#10007;'; // X
                     <tr>
                         <th>Date</th>
                         <?php foreach ($habits as $habit) : ?>
-                            <th><?php echo esc_html($habit->post_title); ?></th>
+                            <th><a href="<?php echo get_edit_post_link($habit->ID); ?>">
+                                <?php echo esc_html($habit->post_title); ?>
+                            </a></th>
+                            <!-- Use get_edit_post_link to create a link to the edit page for each habit -->
+                            
+
                         <?php endforeach; ?>
                     </tr>
                 </thead>
