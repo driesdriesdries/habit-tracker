@@ -45,7 +45,41 @@ $no_symbol = '&#10007;'; // X
         </select>
         <input type="submit" value="Filter">
     </form>
+    
+    <?php 
+    // Initialize an array to hold habit completion data
+    foreach ($habits as $habit) {
+        // Fetch the goal amount for each habit
+        $goal_amount = get_field('goal_amount', $habit->ID); // Ensure 'goal_amount' matches your actual field name
+        
+        $habitCompletionData[$habit->ID] = array(
+            'title' => $habit->post_title,
+            'goal_amount' => $goal_amount, // Add the goal amount here
+            'completed_days' => 0,
+            'total_days' => 0,
+        );
+    }
+    
+    // Update completed_days and total_days based on the daily logs
+    while ($daily_logs->have_posts()) {
+        $daily_logs->the_post();
+        $linked_habits = get_field('linked_habits');
+        foreach ($linked_habits as $linked_habit) {
+            if (isset($habitCompletionData[$linked_habit->ID])) {
+                $habitCompletionData[$linked_habit->ID]['total_days']++;
+                $is_completed = true; // Assuming it's completed for simplicity, adjust this based on your actual logic
+                if ($is_completed) {
+                    $habitCompletionData[$linked_habit->ID]['completed_days']++;
+                }
+            }
+        }
+    }
+    ?>
 
+<?php // Output data for inspection
+    echo '<pre>'; print_r($habitCompletionData); echo '</pre>';
+    ?>
+    
     <?php if ($daily_logs->have_posts()) : ?>
         <!-- Table -->
         <div class="table-wrapper">
@@ -58,8 +92,6 @@ $no_symbol = '&#10007;'; // X
                                 <?php echo esc_html($habit->post_title); ?>
                             </a></th>
                             <!-- Use get_edit_post_link to create a link to the edit page for each habit -->
-                            
-
                         <?php endforeach; ?>
                     </tr>
                 </thead>
@@ -84,4 +116,5 @@ $no_symbol = '&#10007;'; // X
     <?php else : ?>
         <p>No daily logs found for the selected year.</p>
     <?php endif; ?>
+
 </div>
