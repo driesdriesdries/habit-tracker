@@ -32,19 +32,6 @@ $no_symbol = '&#10007;'; // X
 ?>
 
 <div class="daily-log-component">
-    <!-- Year Filter Form -->
-    <form class="component" action="<?php echo site_url('/daily_log/'); ?>" method="get">
-        <label for="filter_year">Select Year:</label>
-        <select id="filter_year" name="filter_year">
-            <?php
-            $current_year = date('Y');
-            for ($year = $current_year; $year >= $current_year - 10; $year--) :
-                ?>
-                <option value="<?php echo $year; ?>" <?php echo isset($_GET['filter_year']) && $_GET['filter_year'] == $year ? 'selected' : ''; ?>><?php echo $year; ?></option>
-            <?php endfor; ?>
-        </select>
-        <input type="submit" value="Filter">
-    </form>
     
     <?php 
     // Initialize an array to hold habit completion data
@@ -79,6 +66,53 @@ $no_symbol = '&#10007;'; // X
 <?php // Output data for inspection
     // echo '<pre>'; print_r($habitCompletionData); echo '</pre>';
 ?>
+    <div class="dash-panel">
+        <!-- Year Filter Form -->
+        <form class="component" action="<?php echo site_url('/daily_log/'); ?>" method="get">
+            <label for="filter_year">Select Year:</label>
+            <select id="filter_year" name="filter_year">
+                <?php
+                $current_year = date('Y');
+                for ($year = $current_year; $year >= $current_year - 10; $year--) :
+                    ?>
+                    <option value="<?php echo $year; ?>" <?php echo isset($_GET['filter_year']) && $_GET['filter_year'] == $year ? 'selected' : ''; ?>><?php echo $year; ?></option>
+                <?php endfor; ?>
+            </select>
+            <input type="submit" value="Filter">
+        </form>
+        
+        <!-- //Panels -->
+        <?php
+        // Get the count of daily logs
+        $daily_logs_count = $daily_logs->post_count;
+
+        // Get the count of habits
+        $habits_count = count($habits);
+
+        // Calculate the total count of habit entries (daily logs multiplied by the amount of habits)
+        $total_habit_entries = $daily_logs_count * $habits_count;
+        ?>
+        <div class="panel-group component">
+            <div class="panel">
+                <h3>Habits Completed</h3>
+                <span class="numerator"></span>
+                <span class="denominator"><?php echo $total_habit_entries; ?></p></span>
+            </div>
+            <div class="panel">
+                <h3>Strongest Habit(s)</h3>
+                <p>66 / 323</p>
+            </div>
+            <div class="panel">
+                <h3>Weakest Habit(s)</h3>
+                <p>66 / 323</p>
+            </div>
+            <div class="panel">
+                <h3>Habits Completed</h3>
+                <p>66 / 323</p>
+            </div>
+        </div>
+    </div>
+    
     <!-- Graph Starts -->
     <div class="graph component">
         <canvas id="habitGraph" width="400" height="200"></canvas>

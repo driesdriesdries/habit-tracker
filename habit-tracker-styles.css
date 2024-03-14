@@ -16,10 +16,30 @@
 .daily-log-component .graph {
   margin-bottom: 2rem;
 }
-.daily-log-component form {
-  margin: 2rem 0px;
+.daily-log-component .dash-panel {
+  display: flex;
+  margin-bottom: 2rem;
+  gap: 10px;
+}
+.daily-log-component .dash-panel form {
   font-size: 24px;
   font-weight: bold;
+}
+.daily-log-component .dash-panel .panel-group {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.daily-log-component .dash-panel .panel-group .panel {
+  background-color: #f8d7da;
+  flex-grow: 1;
+}
+.daily-log-component .dash-panel .panel-group .panel h3 {
+  font-size: 20px;
+}
+.daily-log-component .dash-panel .panel-group .panel .numerator, .daily-log-component .dash-panel .panel-group .panel .denominator {
+  font-size: 20px;
 }
 .daily-log-component table {
   text-align: center;

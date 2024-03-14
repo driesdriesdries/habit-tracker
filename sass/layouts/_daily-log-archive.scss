@@ -10,12 +10,33 @@
     //background-color: lightcyan;
     margin-bottom: 2rem;
   }
-  form {
-    margin: 2rem 0px;
-    font-size: 24px;
-    font-weight: bold;
-    //background-color: rgb(249, 255, 88);
+  .dash-panel {
+    display: flex;
+    margin-bottom: 2rem;
+    gap: 10px;
+    form {
+      font-size: 24px;
+      font-weight: bold;
+      //background-color: rgb(249, 255, 88);
+    }
+    .panel-group {
+      flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      .panel {
+        background-color: #f8d7da;
+        flex-grow: 1;
+        h3 {
+          font-size: 20px;
+        }
+        .numerator, .denominator {
+          font-size: 20px;
+        }
+      }
+    }
   }
+  
   table {
     //background-color: gold;
     text-align: center;
