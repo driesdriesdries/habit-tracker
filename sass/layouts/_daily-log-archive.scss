@@ -25,16 +25,22 @@
       justify-content: space-between;
       gap: 10px;
       .panel {
-        background-color: #f8d7da;
+        box-shadow: $box-shadow;
         flex-grow: 1;
+        padding: 2rem;
+        text-transform: capitalize;
         h3 {
-          font-size: 20px;
+          font-size: 16px;
+          margin-bottom: 1rem;
         }
         // .numerator, .denominator {
         //   font-size: 20px;
         // }
-        span {
-          font-size: 20px;
+        span, p, li {
+          font-size: 13px;
+        }
+        ul {
+          list-style-type: none;
         }
       }
     }

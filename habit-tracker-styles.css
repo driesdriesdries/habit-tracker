@@ -32,14 +32,20 @@
   gap: 10px;
 }
 .daily-log-component .dash-panel .panel-group .panel {
-  background-color: #f8d7da;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
   flex-grow: 1;
+  padding: 2rem;
+  text-transform: capitalize;
 }
 .daily-log-component .dash-panel .panel-group .panel h3 {
-  font-size: 20px;
+  font-size: 16px;
+  margin-bottom: 1rem;
 }
-.daily-log-component .dash-panel .panel-group .panel span {
-  font-size: 20px;
+.daily-log-component .dash-panel .panel-group .panel span, .daily-log-component .dash-panel .panel-group .panel p, .daily-log-component .dash-panel .panel-group .panel li {
+  font-size: 13px;
+}
+.daily-log-component .dash-panel .panel-group .panel ul {
+  list-style-type: none;
 }
 .daily-log-component table {
   text-align: center;
