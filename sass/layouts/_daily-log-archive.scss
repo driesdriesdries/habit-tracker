@@ -1,10 +1,23 @@
 .daily-log-component {
+  .component {
+    padding: 2rem;
+    background-color: white;
+    border: 1px solid #f2f2f2;
+    border-radius: 10px;
+    box-shadow:$box-shadow;
+  }
+  .graph {
+    //background-color: lightcyan;
+    margin-bottom: 2rem;
+  }
   form {
     margin: 2rem 0px;
     font-size: 24px;
     font-weight: bold;
+    //background-color: rgb(249, 255, 88);
   }
   table {
+    //background-color: gold;
     text-align: center;
     font-size: 12px;
     td {
@@ -12,12 +25,10 @@
       padding: 1rem .2rem;
     }
     .yes {
-      background-color: rgb(19, 47, 19);
-      color: white;
+      background-color: #d1e7dd;
     }
     .no {
-      background-color: #dc143c66;
-      //color: white;
+      background-color: #f8d7da;
     }
   }
 }

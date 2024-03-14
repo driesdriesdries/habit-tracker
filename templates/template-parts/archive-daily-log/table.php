@@ -33,7 +33,7 @@ $no_symbol = '&#10007;'; // X
 
 <div class="daily-log-component">
     <!-- Year Filter Form -->
-    <form action="<?php echo site_url('/daily_log/'); ?>" method="get">
+    <form class="component" action="<?php echo site_url('/daily_log/'); ?>" method="get">
         <label for="filter_year">Select Year:</label>
         <select id="filter_year" name="filter_year">
             <?php
@@ -77,12 +77,63 @@ $no_symbol = '&#10007;'; // X
     ?>
 
 <?php // Output data for inspection
-    echo '<pre>'; print_r($habitCompletionData); echo '</pre>';
-    ?>
+    // echo '<pre>'; print_r($habitCompletionData); echo '</pre>';
+?>
+    <!-- Graph Starts -->
+    <div class="graph component">
+        <canvas id="habitGraph" width="400" height="200"></canvas>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('habitGraph').getContext('2d');
+
+            var habits = <?php echo json_encode($habitCompletionData); ?>;
+            var habitLabels = [];
+            var goalAmounts = [];
+            var completedDays = [];
+
+            // Populate data arrays
+            Object.values(habits).forEach(function(habit) {
+            habitLabels.push(habit.title);
+            goalAmounts.push(habit.goal_amount);
+            completedDays.push(habit.completed_days);
+            });
+
+            var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: habitLabels,
+                datasets: [{
+                label: 'Goal Amount',
+                data: goalAmounts,
+                backgroundColor: 'rgba(255, 215, 0, 0.5)', // Color: #FFD700
+                backgroundColor: 'rgba(255, 215, 0, 0.5)', // Color: #FFD700
+                borderWidth: 0
+                }, {
+                label: 'Completed Days',
+                data: completedDays,
+                backgroundColor: 'rgba(209, 231, 221, 1)', // Color: #d1e7dd
+                backgroundColor: 'rgba(209, 231, 221, 1)', // Color: #d1e7dd
+                borderWidth: 0
+                }]
+            },
+            options: {
+                scales: {
+                yAxes: [{
+                    ticks: {
+                    beginAtZero: true
+                    }
+                }]
+                }
+            }
+            });
+        });
+        </script>
+    </div>
+    <!-- Graph Ends -->
     
     <?php if ($daily_logs->have_posts()) : ?>
         <!-- Table -->
-        <div class="table-wrapper">
+        <div class="table-wrapper component">
             <table>
                 <thead>
                     <tr>
@@ -114,7 +165,7 @@ $no_symbol = '&#10007;'; // X
             </table>
         </div>
     <?php else : ?>
-        <p>No daily logs found for the selected year.</p>
+        <p class="component">No daily logs found for the selected year.</p>
     <?php endif; ?>
 
 </div>

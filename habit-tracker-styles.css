@@ -1,12 +1,21 @@
 .plugin-container {
+  background-color: crimson;
   max-width: 1400px;
   margin: auto;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 1rem;
-  border: 1px solid #f2f2f2;
 }
 
+.daily-log-component .component {
+  padding: 2rem;
+  background-color: white;
+  border: 1px solid #f2f2f2;
+  border-radius: 10px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+}
+.daily-log-component .graph {
+  margin-bottom: 2rem;
+}
 .daily-log-component form {
   margin: 2rem 0px;
   font-size: 24px;
@@ -21,9 +30,8 @@
   padding: 1rem 0.2rem;
 }
 .daily-log-component table .yes {
-  background-color: rgb(19, 47, 19);
-  color: white;
+  background-color: #d1e7dd;
 }
 .daily-log-component table .no {
-  background-color: rgba(220, 20, 60, 0.4);
+  background-color: #f8d7da;
 }
