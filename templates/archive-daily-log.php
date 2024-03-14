@@ -145,11 +145,7 @@
             <div class="panel-group component">
                 <div class="panel">
                     <h3>Habits Completed</h3>
-                    <p><span><?php echo $total_completed_habits; ?></span> / <span><?php echo $total_habit_entries; ?></span></p>
-                </div>
-                <div class="panel">
-                    <h3>Completion Score</h3>
-                    <p><?php echo $completion_score; ?>%</p>
+                    <p><span><?php echo $total_completed_habits; ?></span> / <span><?php echo $total_habit_entries; ?></span> <?php echo '('.$completion_score.')'; ?>%</p>
                 </div>
                 <div class="panel">
                     <h3>Strongest Habit(s)</h3>
