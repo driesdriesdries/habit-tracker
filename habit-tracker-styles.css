@@ -38,7 +38,7 @@
 .daily-log-component .dash-panel .panel-group .panel h3 {
   font-size: 20px;
 }
-.daily-log-component .dash-panel .panel-group .panel .numerator, .daily-log-component .dash-panel .panel-group .panel .denominator {
+.daily-log-component .dash-panel .panel-group .panel span {
   font-size: 20px;
 }
 .daily-log-component table {

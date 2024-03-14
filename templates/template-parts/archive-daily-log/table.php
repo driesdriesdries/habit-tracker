@@ -95,8 +95,7 @@ $no_symbol = '&#10007;'; // X
         <div class="panel-group component">
             <div class="panel">
                 <h3>Habits Completed</h3>
-                <span class="numerator"></span>
-                <span class="denominator"><?php echo $total_habit_entries; ?></p></span>
+                <p><span>74</span> / <span><?php echo $total_habit_entries; ?></span></p>
             </div>
             <div class="panel">
                 <h3>Strongest Habit(s)</h3>
