@@ -91,11 +91,26 @@ $no_symbol = '&#10007;'; // X
 
         // Calculate the total count of habit entries (daily logs multiplied by the amount of habits)
         $total_habit_entries = $daily_logs_count * $habits_count;
+
+        // Initialize a variable to count completed habits
+        $total_completed_habits = 0;
+
+        // Update total_completed_habits based on the completion data
+        foreach ($habitCompletionData as $habitData) {
+            $total_completed_habits += $habitData['completed_days'];
+        }
+
+        // Calculate the completion score (completed habits against total possible habits)
+        $completion_score = $total_completed_habits / $total_habit_entries * 100;
         ?>
         <div class="panel-group component">
             <div class="panel">
                 <h3>Habits Completed</h3>
-                <p><span>74</span> / <span><?php echo $total_habit_entries; ?></span></p>
+                <p><span><?php echo $total_completed_habits; ?></span> / <span><?php echo $total_habit_entries; ?></span></p>
+            </div>
+            <div class="panel">
+                <h3>Completion Score</h3>
+                <p><?php echo $completion_score; ?>%</p>
             </div>
             <div class="panel">
                 <h3>Strongest Habit(s)</h3>
@@ -103,10 +118,6 @@ $no_symbol = '&#10007;'; // X
             </div>
             <div class="panel">
                 <h3>Weakest Habit(s)</h3>
-                <p>66 / 323</p>
-            </div>
-            <div class="panel">
-                <h3>Habits Completed</h3>
                 <p>66 / 323</p>
             </div>
         </div>
