@@ -86,7 +86,7 @@ if (is_user_logged_in()) {
         $completionRateB = $b['completed_days'] / $b['goal_amount'];
         return $completionRateA <=> $completionRateB;
     });
-    $weakestHabits = array_slice($habitCompletionData, 0, 3);
+    $weakestHabits = array_slice($habitCompletionData, 0, 5);
     $weakestHabitsList = '<ul>';
     foreach ($weakestHabits as $habit) {
         $completionRate = ($habit['completed_days'] / $habit['goal_amount']) * 100;

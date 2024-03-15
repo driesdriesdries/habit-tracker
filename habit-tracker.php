@@ -178,3 +178,23 @@ function enqueue_chart_js() {
     wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '2.9.4', true);
 }
 add_action('wp_enqueue_scripts', 'enqueue_chart_js');
+
+function ht_add_view_performance_button() {
+    global $post;
+
+    // Check if we're on the daily_log post type
+    if ($post->post_type == 'daily_log') {
+        // Get the URL to the daily log archive
+        $archive_url = get_post_type_archive_link('daily_log');
+        
+        // Only add the button if we have a valid URL
+        if ($archive_url) {
+            // Inline CSS for the button
+            $button_style = 'style="background-color: crimson; border-color: crimson; color: white; margin-top: 10px;"';
+
+            // Echo the button with the custom style
+            echo '<a href="' . esc_url($archive_url) . '" class="button button-primary" ' . $button_style . '>View Performance</a>';
+        }
+    }
+}
+add_action('edit_form_after_title', 'ht_add_view_performance_button');
