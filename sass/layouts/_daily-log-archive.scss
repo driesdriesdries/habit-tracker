@@ -15,9 +15,27 @@
     margin-bottom: 2rem;
     gap: 10px;
     form {
-      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 25%;
+      font-size: 16px;
       font-weight: bold;
-      //background-color: rgb(249, 255, 88);
+      // background-color: rgb(249, 255, 88);
+      input[type="submit"][value="Filter"] {
+        padding: 1rem;
+      }
+      .filter-date-selection {
+        // background-color: lightblue;
+        margin-bottom: 1rem;
+        .end-date, .start-date {
+          display: flex;
+          justify-content: space-between;
+        }
+        .start-date {
+          margin-bottom: 10px;
+        }
+      }
     }
     .panel-group {
       flex-grow: 1;
@@ -33,9 +51,6 @@
           font-size: 16px;
           margin-bottom: 1rem;
         }
-        // .numerator, .denominator {
-        //   font-size: 20px;
-        // }
         span, p, li {
           font-size: 13px;
         }

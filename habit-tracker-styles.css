@@ -3,7 +3,6 @@
   max-width: 1400px;
   margin: auto;
   padding: 2rem;
-  margin-top: 1rem;
 }
 
 .daily-log-component .component {
@@ -22,8 +21,25 @@
   gap: 10px;
 }
 .daily-log-component .dash-panel form {
-  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 25%;
+  font-size: 16px;
   font-weight: bold;
+}
+.daily-log-component .dash-panel form input[type=submit][value=Filter] {
+  padding: 1rem;
+}
+.daily-log-component .dash-panel form .filter-date-selection {
+  margin-bottom: 1rem;
+}
+.daily-log-component .dash-panel form .filter-date-selection .end-date, .daily-log-component .dash-panel form .filter-date-selection .start-date {
+  display: flex;
+  justify-content: space-between;
+}
+.daily-log-component .dash-panel form .filter-date-selection .start-date {
+  margin-bottom: 10px;
 }
 .daily-log-component .dash-panel .panel-group {
   flex-grow: 1;
