@@ -5,9 +5,11 @@ if (is_user_logged_in()) {
 
 <div class="plugin-container">
     <?php
-    $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : null;
-    $end_date = isset($_GET['end_date']) ? sanitize_text_field($_GET['end_date']) : null;
-    $filter_year = isset($_GET['filter_year']) ? intval($_GET['filter_year']) : date('Y');
+    $current_year = date('Y');
+    $current_date = date('Y-m-d');
+    $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : $current_year . '-01-01';
+    $end_date = isset($_GET['end_date']) ? sanitize_text_field($_GET['end_date']) : $current_date;
+    $filter_year = isset($_GET['filter_year']) ? intval($_GET['filter_year']) : $current_year;
     $args = array(
         'post_type' => 'daily_log',
         'posts_per_page' => -1,
@@ -98,11 +100,11 @@ if (is_user_logged_in()) {
                 <div class="filter-date-selection">
                     <div class="start-date">
                         <label for="start_date">Start Date:</label>
-                        <input type="date" id="start_date" name="start_date" value="<?php echo isset($_GET['start_date']) ? $_GET['start_date'] : ''; ?>">
+                        <input type="date" id="start_date" name="start_date" value="<?php echo $start_date; ?>">
                     </div>
                     <div class="end-date">
                         <label for="end_date">End Date:</label>
-                        <input type="date" id="end_date" name="end_date" value="<?php echo isset($_GET['end_date']) ? $_GET['end_date'] : ''; ?>">
+                        <input type="date" id="end_date" name="end_date" value="<?php echo $end_date; ?>">
                     </div>
                 </div>
                 <input type="submit" value="Filter">
