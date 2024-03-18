@@ -72,17 +72,25 @@ if (is_user_logged_in()) {
     $strongest_habits_with_percentage = array();
     $sorted_habits = $habitCompletionData;
     usort($sorted_habits, function ($a, $b) {
-        return ($b['completed_days'] / max($b['goal_amount'], 1)) <=> ($a['completed_days'] / max($a['goal_amount'], 1));
+        $percentage_a = $a['completed_days'] / $a['goal_amount'] * 100;
+        $percentage_b = $b['completed_days'] / $b['goal_amount'] * 100;
+        return $percentage_b - $percentage_a;
     });
-    for ($i = 0; $i < min(5, count($sorted_habits)); $i++) {
-        $completion_percentage = number_format(($sorted_habits[$i]['completed_days'] / max($sorted_habits[$i]['goal_amount'], 1) * 100), 2);
-        $strongest_habits_with_percentage[] = $sorted_habits[$i]['title'] . ': ' . $completion_percentage . '%';
+    for ($i = 0; $i < min(3, count($sorted_habits)); $i++) {
+        $habit_title = $sorted_habits[$i]['title'];
+        $completion_percentage = number_format(($sorted_habits[$i]['completed_days'] / $sorted_habits[$i]['goal_amount'] * 100), 2);
+        $strongest_habits_with_percentage[] = $habit_title . ': ' . $completion_percentage . '%';
     }
-    $weakestHabits = array_slice($sorted_habits, -5);
+    usort($habitCompletionData, function ($a, $b) {
+        $completionRateA = $a['completed_days'] / $a['goal_amount'];
+        $completionRateB = $b['completed_days'] / $b['goal_amount'];
+        return $completionRateA <=> $completionRateB;
+    });
+    $weakestHabits = array_slice($habitCompletionData, 0, 5);
     $weakestHabitsList = '<ul>';
     foreach ($weakestHabits as $habit) {
-        $completionRate = number_format(($habit['completed_days'] / max($habit['goal_amount'], 1)) * 100, 2);
-        $weakestHabitsList .= '<li>' . $habit['title'] . ' - ' . $completionRate . '%</li>';
+        $completionRate = ($habit['completed_days'] / $habit['goal_amount']) * 100;
+        $weakestHabitsList .= '<li>' . $habit['title'] . ' - ' . number_format($completionRate, 2) . '%</li>';
     }
     $weakestHabitsList .= '</ul>';
     ?>
