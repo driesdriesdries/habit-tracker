@@ -3,7 +3,7 @@
  * Plugin Name: Habit Tracker
  * Plugin URI: http://yourwebsite.com/habit-tracker
  * Description: A plugin to track and manage habits.
- * Version: 1.0
+ * Version: 1.1
  * Author: Andries Bester
  * Author URI: https://andriesbester.com/
  */

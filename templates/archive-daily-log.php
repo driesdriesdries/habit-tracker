@@ -87,14 +87,21 @@ if (is_user_logged_in()) {
     $weakestHabitsList .= '</ul>';
 
     function calculate_top_three_streaks($start_date, $end_date) {
+        // Fetch all habits
         $habits = get_posts([
             'post_type' => 'habit',
             'posts_per_page' => -1,
         ]);
     
+        // If no habits are found, return an empty array to indicate no streak data
+        if (empty($habits)) {
+            return []; 
+        }
+    
         $streaks = [];
     
         foreach ($habits as $habit) {
+            // Fetch daily logs associated with each habit within the specified date range
             $daily_logs = get_posts([
                 'post_type' => 'daily_log',
                 'posts_per_page' => -1,
@@ -117,21 +124,24 @@ if (is_user_logged_in()) {
                 'order' => 'ASC',
             ]);
     
-    
+            // Initialize streak calculation variables
             $currentStreak = 0;
             $longestStreak = 0;
             $previousDate = null;
     
+            // Iterate through each daily log to calculate the current and longest streaks
             foreach ($daily_logs as $log) {
                 $logDate = get_field('log_date', $log->ID);
                 $logDateTimestamp = strtotime($logDate);
     
+                // Increment current streak if the log is consecutive; otherwise, reset it
                 if ($previousDate === null || ($logDateTimestamp - $previousDate) === DAY_IN_SECONDS) {
                     $currentStreak++;
                 } else {
                     $currentStreak = 1; // Reset streak if there's a gap
                 }
     
+                // Update longest streak if current streak exceeds it
                 if ($currentStreak > $longestStreak) {
                     $longestStreak = $currentStreak;
                 }
@@ -139,14 +149,17 @@ if (is_user_logged_in()) {
                 $previousDate = $logDateTimestamp;
             }
     
+            // Store the longest streak for the current habit
             $streaks[$habit->post_title] = $longestStreak;
         }
     
-        arsort($streaks); // Sort streaks in descending order
+        // Sort the streaks in descending order to find the top three
+        arsort($streaks);
         $topThreeStreaks = array_slice($streaks, 0, 3, true);
     
         return $topThreeStreaks;
     }
+    
     
     ?>
     <div class="daily-log-component">
@@ -172,15 +185,22 @@ if (is_user_logged_in()) {
                         $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : $current_year . '-01-01';
                         $end_date = isset($_GET['end_date']) ? sanitize_text_field($_GET['end_date']) : $current_date;
                         
+                        // Fetch the top three streaks within the given date range
                         $topThreeStreaks = calculate_top_three_streaks($start_date, $end_date);
 
-                        echo '<h3>Streak Information</h3>';
-                        echo '<ul>';
-                        foreach ($topThreeStreaks as $habitName => $streakLength) {
-                            echo '<li>' . esc_html($habitName) . ': <span>' . $streakLength . ' days</span></li>';
+                        // Check if there are any streaks to display
+                        if (!empty($topThreeStreaks)) {
+                            echo '<h3>Streak Information</h3>';
+                            echo '<ul>';
+                            foreach ($topThreeStreaks as $habitName => $streakLength) {
+                                echo '<li>' . esc_html($habitName) . ': <span>' . $streakLength . ' days</span></li>';
+                            }
+                            echo '</ul>';
+                        } else {
+                            // If no streaks are found, inform the user
+                            echo '<h3>Streak Information</h3>';
+                            echo '<p>No streak information available.</p>';
                         }
-                        echo '</ul>';
-                        
                     ?>
                 </div>
                 <div class="panel">
