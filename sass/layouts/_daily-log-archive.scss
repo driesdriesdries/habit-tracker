@@ -65,9 +65,20 @@
     //background-color: gold;
     text-align: center;
     font-size: 12px;
+    tr {
+      
+      a {
+        font-size: 1rem;
+        color: #000;
+        font-weight: 700;
+        text-transform: capitalize;
+        padding: 1rem .2rem;
+      }
+    }
     td {
-      border: 2px solid rgba(0, 0, 0, 0.45);
-      padding: 1rem .2rem;
+      border: 1px solid rgba(0, 0, 0, 0.45);
+      padding-top: .3rem;
+      padding-bottom: .3rem;
     }
     .yes {
       background-color: #d1e7dd;
