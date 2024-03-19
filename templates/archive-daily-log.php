@@ -85,6 +85,69 @@ if (is_user_logged_in()) {
         $weakestHabitsList .= '<li>' . $habit['title'] . ' - ' . $completionRate . '%</li>';
     }
     $weakestHabitsList .= '</ul>';
+
+    function calculate_top_three_streaks($start_date, $end_date) {
+        $habits = get_posts([
+            'post_type' => 'habit',
+            'posts_per_page' => -1,
+        ]);
+    
+        $streaks = [];
+    
+        foreach ($habits as $habit) {
+            $daily_logs = get_posts([
+                'post_type' => 'daily_log',
+                'posts_per_page' => -1,
+                'meta_query' => [
+                    'relation' => 'AND',
+                    [
+                        'key' => 'linked_habits',
+                        'value' => '"' . $habit->ID . '"',
+                        'compare' => 'LIKE',
+                    ],
+                    [
+                        'key' => 'log_date',
+                        'value' => [$start_date, $end_date],
+                        'compare' => 'BETWEEN',
+                        'type' => 'DATE',
+                    ],
+                ],
+                'orderby' => 'meta_value',
+                'meta_key' => 'log_date',
+                'order' => 'ASC',
+            ]);
+    
+    
+            $currentStreak = 0;
+            $longestStreak = 0;
+            $previousDate = null;
+    
+            foreach ($daily_logs as $log) {
+                $logDate = get_field('log_date', $log->ID);
+                $logDateTimestamp = strtotime($logDate);
+    
+                if ($previousDate === null || ($logDateTimestamp - $previousDate) === DAY_IN_SECONDS) {
+                    $currentStreak++;
+                } else {
+                    $currentStreak = 1; // Reset streak if there's a gap
+                }
+    
+                if ($currentStreak > $longestStreak) {
+                    $longestStreak = $currentStreak;
+                }
+    
+                $previousDate = $logDateTimestamp;
+            }
+    
+            $streaks[$habit->post_title] = $longestStreak;
+        }
+    
+        arsort($streaks); // Sort streaks in descending order
+        $topThreeStreaks = array_slice($streaks, 0, 3, true);
+    
+        return $topThreeStreaks;
+    }
+    
     ?>
     <div class="daily-log-component">
         <div class="dash-panel">
@@ -105,12 +168,20 @@ if (is_user_logged_in()) {
                 <div class="panel">
                     <h3>Habits Completed</h3>
                     <p><span><?php echo $total_completed_habits; ?></span> / <span><?php echo $total_habit_entries; ?></span> <?php echo '(' . $completion_score . ')'; ?>%</p>
-                    <h3>Streak Information</h3>
-                    <ul>
-                        <li>Habit Name:<span>60 days</span></li>
-                        <li>Habit Name:<span>50 days</span></li>
-                        <li>Habit Name:<span>40 days</span></li>
-                    </ul>
+                    <?php 
+                        $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : $current_year . '-01-01';
+                        $end_date = isset($_GET['end_date']) ? sanitize_text_field($_GET['end_date']) : $current_date;
+                        
+                        $topThreeStreaks = calculate_top_three_streaks($start_date, $end_date);
+
+                        echo '<h3>Streak Information</h3>';
+                        echo '<ul>';
+                        foreach ($topThreeStreaks as $habitName => $streakLength) {
+                            echo '<li>' . esc_html($habitName) . ': <span>' . $streakLength . ' days</span></li>';
+                        }
+                        echo '</ul>';
+                        
+                    ?>
                 </div>
                 <div class="panel">
                     <h3>Strongest Habit(s)</h3>
