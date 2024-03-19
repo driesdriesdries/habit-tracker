@@ -69,14 +69,14 @@ if (is_user_logged_in()) {
         $total_completed_habits += $habitData['completed_days'];
     }
     $completion_score = number_format($total_completed_habits / $total_habit_entries * 100, 2);
-    $strongest_habits_with_percentage = array();
+    $habit_progress_with_percentage = array();
     $sorted_habits = $habitCompletionData;
     usort($sorted_habits, function ($a, $b) {
         return ($b['completed_days'] / max($b['goal_amount'], 1)) <=> ($a['completed_days'] / max($a['goal_amount'], 1));
     });
     for ($i = 0; $i < min(5, count($sorted_habits)); $i++) {
         $completion_percentage = number_format(($sorted_habits[$i]['completed_days'] / max($sorted_habits[$i]['goal_amount'], 1) * 100), 2);
-        $strongest_habits_with_percentage[] = $sorted_habits[$i]['title'] . ': ' . $completion_percentage . '%';
+        $habit_progress_with_percentage[] = $sorted_habits[$i]['title'] . ': ' . $completion_percentage . '%';
     }
     $weakestHabits = array_slice($sorted_habits, -5);
     $weakestHabitsList = '<ul>';
@@ -204,10 +204,10 @@ if (is_user_logged_in()) {
                     ?>
                 </div>
                 <div class="panel">
-                    <h3>Strongest Habit(s)</h3>
+                    <h3>Progress Toward Goal</h3>
                     <?php
                     echo '<ul>';
-                    foreach ($strongest_habits_with_percentage as $habit_info) {
+                    foreach ($habit_progress_with_percentage as $habit_info) {
                         echo '<li>' . $habit_info . '</li>';
                     }
                     echo '</ul>';
