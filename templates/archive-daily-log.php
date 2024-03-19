@@ -105,6 +105,12 @@ if (is_user_logged_in()) {
                 <div class="panel">
                     <h3>Habits Completed</h3>
                     <p><span><?php echo $total_completed_habits; ?></span> / <span><?php echo $total_habit_entries; ?></span> <?php echo '(' . $completion_score . ')'; ?>%</p>
+                    <h3>Streak Information</h3>
+                    <ul>
+                        <li>Habit Name:<span>60 days</span></li>
+                        <li>Habit Name:<span>50 days</span></li>
+                        <li>Habit Name:<span>40 days</span></li>
+                    </ul>
                 </div>
                 <div class="panel">
                     <h3>Strongest Habit(s)</h3>
