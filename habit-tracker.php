@@ -243,3 +243,46 @@ function remove_title_field_for_daily_logs() {
     remove_post_type_support( 'daily_log', 'title' );
 }
 add_action( 'admin_init', 'remove_title_field_for_daily_logs' );
+
+function ht_remove_habit_tracker_subscriber_role() {
+    remove_role('habit_tracker_subscriber');
+}
+
+register_deactivation_hook(__FILE__, 'ht_remove_habit_tracker_subscriber_role');
+
+function ht_create_habit_tracker_subscriber_role() {
+    // Define custom capabilities for managing 'habit' and 'daily_log' post types.
+    $capabilities = array(
+        'read' => true,  // Allows a user to read posts, which is inherently required.
+        
+        // Capabilities for 'habit' post type.
+        'edit_habits' => true,
+        'edit_others_habits' => false,
+        'publish_habits' => true,
+        'read_private_habits' => false,
+        'delete_habits' => true,
+        'delete_private_habits' => false,
+        'delete_published_habits' => true,
+        'delete_others_habits' => false,
+        'edit_private_habits' => false,
+        'edit_published_habits' => true,
+        
+        // Capabilities for 'daily_log' post type.
+        'edit_daily_logs' => true,
+        'edit_others_daily_logs' => false,
+        'publish_daily_logs' => true,
+        'read_private_daily_logs' => false,
+        'delete_daily_logs' => true,
+        'delete_private_daily_logs' => false,
+        'delete_published_daily_logs' => true,
+        'delete_others_daily_logs' => false,
+        'edit_private_daily_logs' => false,
+        'edit_published_daily_logs' => true,
+    );
+
+    // Add 'HabitTrackerSubscriber' role with defined capabilities.
+    add_role('habit_tracker_subscriber', 'Habit Tracker Subscriber', $capabilities);
+}
+
+// Hook the role creation to 'init' so it runs when needed.
+add_action('init', 'ht_create_habit_tracker_subscriber_role');
