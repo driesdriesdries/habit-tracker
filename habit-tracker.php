@@ -243,9 +243,3 @@ function remove_title_field_for_daily_logs() {
     remove_post_type_support( 'daily_log', 'title' );
 }
 add_action( 'admin_init', 'remove_title_field_for_daily_logs' );
-
-// function ht_remove_habit_tracker_subscriber_role() {
-//     remove_role('habit_tracker_subscriber');
-// }
-
-// register_deactivation_hook(__FILE__, 'ht_remove_habit_tracker_subscriber_role');
