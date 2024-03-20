@@ -69,98 +69,30 @@ if (is_user_logged_in()) {
         $total_completed_habits += $habitData['completed_days'];
     }
     $completion_score = number_format($total_completed_habits / $total_habit_entries * 100, 2);
-    $habit_progress_with_percentage = array();
+    $strongest_habits_with_percentage = array();
     $sorted_habits = $habitCompletionData;
     usort($sorted_habits, function ($a, $b) {
-        return ($b['completed_days'] / max($b['goal_amount'], 1)) <=> ($a['completed_days'] / max($a['goal_amount'], 1));
+        $percentage_a = $a['completed_days'] / $a['goal_amount'] * 100;
+        $percentage_b = $b['completed_days'] / $b['goal_amount'] * 100;
+        return $percentage_b - $percentage_a;
     });
-    for ($i = 0; $i < min(5, count($sorted_habits)); $i++) {
-        $completion_percentage = number_format(($sorted_habits[$i]['completed_days'] / max($sorted_habits[$i]['goal_amount'], 1) * 100), 2);
-        $habit_progress_with_percentage[] = $sorted_habits[$i]['title'] . ': ' . $completion_percentage . '%';
+    for ($i = 0; $i < min(3, count($sorted_habits)); $i++) {
+        $habit_title = $sorted_habits[$i]['title'];
+        $completion_percentage = number_format(($sorted_habits[$i]['completed_days'] / $sorted_habits[$i]['goal_amount'] * 100), 2);
+        $strongest_habits_with_percentage[] = $habit_title . ': ' . $completion_percentage . '%';
     }
-    $weakestHabits = array_slice($sorted_habits, -5);
+    usort($habitCompletionData, function ($a, $b) {
+        $completionRateA = $a['completed_days'] / $a['goal_amount'];
+        $completionRateB = $b['completed_days'] / $b['goal_amount'];
+        return $completionRateA <=> $completionRateB;
+    });
+    $weakestHabits = array_slice($habitCompletionData, 0, 5);
     $weakestHabitsList = '<ul>';
     foreach ($weakestHabits as $habit) {
-        $completionRate = number_format(($habit['completed_days'] / max($habit['goal_amount'], 1)) * 100, 2);
-        $weakestHabitsList .= '<li>' . $habit['title'] . ' - ' . $completionRate . '%</li>';
+        $completionRate = ($habit['completed_days'] / $habit['goal_amount']) * 100;
+        $weakestHabitsList .= '<li>' . $habit['title'] . ' - ' . number_format($completionRate, 2) . '%</li>';
     }
     $weakestHabitsList .= '</ul>';
-
-    function calculate_top_three_streaks($start_date, $end_date) {
-        // Fetch all habits
-        $habits = get_posts([
-            'post_type' => 'habit',
-            'posts_per_page' => -1,
-        ]);
-    
-        // If no habits are found, return an empty array to indicate no streak data
-        if (empty($habits)) {
-            return []; 
-        }
-    
-        $streaks = [];
-    
-        foreach ($habits as $habit) {
-            // Fetch daily logs associated with each habit within the specified date range
-            $daily_logs = get_posts([
-                'post_type' => 'daily_log',
-                'posts_per_page' => -1,
-                'meta_query' => [
-                    'relation' => 'AND',
-                    [
-                        'key' => 'linked_habits',
-                        'value' => '"' . $habit->ID . '"',
-                        'compare' => 'LIKE',
-                    ],
-                    [
-                        'key' => 'log_date',
-                        'value' => [$start_date, $end_date],
-                        'compare' => 'BETWEEN',
-                        'type' => 'DATE',
-                    ],
-                ],
-                'orderby' => 'meta_value',
-                'meta_key' => 'log_date',
-                'order' => 'ASC',
-            ]);
-    
-            // Initialize streak calculation variables
-            $currentStreak = 0;
-            $longestStreak = 0;
-            $previousDate = null;
-    
-            // Iterate through each daily log to calculate the current and longest streaks
-            foreach ($daily_logs as $log) {
-                $logDate = get_field('log_date', $log->ID);
-                $logDateTimestamp = strtotime($logDate);
-    
-                // Increment current streak if the log is consecutive; otherwise, reset it
-                if ($previousDate === null || ($logDateTimestamp - $previousDate) === DAY_IN_SECONDS) {
-                    $currentStreak++;
-                } else {
-                    $currentStreak = 1; // Reset streak if there's a gap
-                }
-    
-                // Update longest streak if current streak exceeds it
-                if ($currentStreak > $longestStreak) {
-                    $longestStreak = $currentStreak;
-                }
-    
-                $previousDate = $logDateTimestamp;
-            }
-    
-            // Store the longest streak for the current habit
-            $streaks[$habit->post_title] = $longestStreak;
-        }
-    
-        // Sort the streaks in descending order to find the top three
-        arsort($streaks);
-        $topThreeStreaks = array_slice($streaks, 0, 3, true);
-    
-        return $topThreeStreaks;
-    }
-    
-    
     ?>
     <div class="daily-log-component">
         <div class="dash-panel">
@@ -181,33 +113,12 @@ if (is_user_logged_in()) {
                 <div class="panel">
                     <h3>Habits Completed</h3>
                     <p><span><?php echo $total_completed_habits; ?></span> / <span><?php echo $total_habit_entries; ?></span> <?php echo '(' . $completion_score . ')'; ?>%</p>
-                    <?php 
-                        $start_date = isset($_GET['start_date']) ? sanitize_text_field($_GET['start_date']) : $current_year . '-01-01';
-                        $end_date = isset($_GET['end_date']) ? sanitize_text_field($_GET['end_date']) : $current_date;
-                        
-                        // Fetch the top three streaks within the given date range
-                        $topThreeStreaks = calculate_top_three_streaks($start_date, $end_date);
-
-                        // Check if there are any streaks to display
-                        if (!empty($topThreeStreaks)) {
-                            echo '<h3>Streak Information</h3>';
-                            echo '<ul>';
-                            foreach ($topThreeStreaks as $habitName => $streakLength) {
-                                echo '<li>' . esc_html($habitName) . ': <span>' . $streakLength . ' days</span></li>';
-                            }
-                            echo '</ul>';
-                        } else {
-                            // If no streaks are found, inform the user
-                            echo '<h3>Streak Information</h3>';
-                            echo '<p>No streak information available.</p>';
-                        }
-                    ?>
                 </div>
                 <div class="panel">
-                    <h3>Progress Toward Goal</h3>
+                    <h3>Strongest Habit(s)</h3>
                     <?php
                     echo '<ul>';
-                    foreach ($habit_progress_with_percentage as $habit_info) {
+                    foreach ($strongest_habits_with_percentage as $habit_info) {
                         echo '<li>' . $habit_info . '</li>';
                     }
                     echo '</ul>';

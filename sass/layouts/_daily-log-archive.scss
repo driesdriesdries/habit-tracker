@@ -1,62 +1,90 @@
-.daily-log-archive {
-  .primary-container {
-    max-width: 1240px;
-    margin: auto;
-  }
-
-  .panel-group,
-  .graph,
-  .table {
-    box-shadow: $box-shadow;
-    margin-bottom: 2rem;
+.daily-log-component {
+  .component {
     padding: 2rem;
-    border-radius: 2rem;
-    #filter {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-    }
+    background-color: white;
+    border: 1px solid #f2f2f2;
+    border-radius: 10px;
+    box-shadow:$box-shadow;
   }
-  .panel-group {
+  .graph {
+    //background-color: lightcyan;
+    margin-bottom: 2rem;
+  }
+  .dash-panel {
     display: flex;
-    justify-content: space-between;
+    margin-bottom: 2rem;
     gap: 10px;
-    .panel {
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       width: 25%;
-      padding: 2rem;
-      border: 1px solid #f2f2f2;
-      border-radius: 25px;
-      text-align: center;
-      p {
-        font-weight: bold;
+      font-size: 16px;
+      font-weight: bold;
+      // background-color: rgb(249, 255, 88);
+      input[type="submit"][value="Filter"] {
+        padding: 1rem;
       }
-      span {
-        font-size: 14px;
+      .filter-date-selection {
+        // background-color: lightblue;
+        margin-bottom: 1rem;
+        .end-date, .start-date {
+          display: flex;
+          justify-content: space-between;
+        }
+        .start-date {
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .panel-group {
+      flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      .panel {
+        box-shadow: $box-shadow;
+        flex-grow: 1;
+        padding: 2rem;
+        text-transform: capitalize;
+        h3 {
+          font-size: 16px;
+          margin-bottom: 1rem;
+        }
+        span, p, li {
+          font-size: 13px;
+        }
+        ul {
+          list-style-type: none;
+        }
       }
     }
   }
-
+  
   table {
-    border-collapse: collapse;
-    width: 100%;
-    th,
-    td {
-      border: 1px solid black;
-      padding: 8px;
-      text-align: center;
-
-      &.green-cell {
-        background-color: #5cb85c; // Green
-        color: white;
-      }
-
-      &.red-cell {
-        background-color: #d9534f; // Red
-        color: white;
+    //background-color: gold;
+    text-align: center;
+    font-size: 12px;
+    tr {
+      
+      a {
+        font-size: 1rem;
+        color: #000;
+        font-weight: 700;
+        text-transform: capitalize;
+        padding: 1rem .2rem;
       }
     }
-
-    th {
-      background-color: #f2f2f2;
+    td {
+      border: 1px solid rgba(0, 0, 0, 0.45);
+      padding-top: .3rem;
+      padding-bottom: .3rem;
+    }
+    .yes {
+      background-color: #d1e7dd;
+    }
+    .no {
+      background-color: #f8d7da;
     }
   }
 }
