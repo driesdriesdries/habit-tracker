@@ -65,6 +65,8 @@
     //background-color: gold;
     text-align: center;
     font-size: 12px;
+    width: 100%;
+    max-width: 100%;
     tr {
       
       a {
@@ -77,8 +79,7 @@
     }
     td {
       border: 1px solid rgba(0, 0, 0, 0.45);
-      padding-top: .3rem;
-      padding-bottom: .3rem;
+      padding: 0rem;
     }
     .yes {
       background-color: #d1e7dd;
