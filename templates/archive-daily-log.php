@@ -280,7 +280,12 @@ if (is_user_logged_in()) {
                     <tbody>
                         <?php while ($daily_logs->have_posts()) : $daily_logs->the_post(); ?>
                             <tr>
-                                <td><a href="<?php echo get_edit_post_link(); ?>"><?php echo esc_html(get_field('log_date')); ?></a></td>
+                            <td><a href="<?php echo get_edit_post_link(); ?>">
+                                    <?php 
+                                    $log_date = get_field('log_date'); // Store the log date in a variable
+                                    echo esc_html($log_date) . ' (' . date('l', strtotime($log_date)) . ')'; // Display the date and day name
+                                    ?>
+                                </a></td>
                                 <?php foreach ($habits as $habit) : ?>
                                     <?php
                                     $linked_habits = get_field('linked_habits');
